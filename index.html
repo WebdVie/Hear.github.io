@@ -110,7 +110,7 @@ footer{padding:26px 0 40px;font-size:13px;color:var(--muted);display:flex;justif
 <div class="wrap">
   <header>
     <a class="logo" href="#top" aria-label="Hear home"><i aria-hidden="true"><b style="height:8px"></b><b style="height:18px"></b><b style="height:12px"></b><b style="height:20px"></b><b style="height:7px"></b></i>Hear</a>
-    <a class="pill" href="https://tally.so/r/PR1zdV" target="_blank" rel="noopener">Join the waitlist</a>
+    <a class="pill" href="https://forms.gle/XebiETTrDJG1LT9V8" target="_blank" rel="noopener">Join the waitlist</a>
   </header>
 
   <main id="top">
@@ -119,7 +119,8 @@ footer{padding:26px 0 40px;font-size:13px;color:var(--muted);display:flex;justif
         <h1>Say what’s inside, without fear of judgment.</h1>
         <p class="lead">Hear is a social app made only of voices. No photos, no videos, and no one above anyone else. It is a place to share the side of you that nobody sees.</p>
         <div id="join">
-          <a class="btn" href="https://tally.so/r/PR1zdV" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:16px 30px;font-size:16px">Join the waitlist</a>
+          <div id="joinEmbed" style="max-width:440px;margin:0 auto"></div>
+          <a id="joinLink" class="btn" href="https://forms.gle/XebiETTrDJG1LT9V8" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:16px 30px;font-size:16px">Join the waitlist</a>
           <div class="msg">Leave your email and we’ll tell you the day Hear opens.</div>
         </div>
       </div>
@@ -144,7 +145,7 @@ footer{padding:26px 0 40px;font-size:13px;color:var(--muted);display:flex;justif
     <section class="final">
       <h2>Hear is coming soon.</h2>
       <p>Leave your email and we’ll tell you the day it opens.</p>
-      <a class="btn" href="https://tally.so/r/PR1zdV" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">Join the waitlist</a>
+      <a class="btn" href="https://forms.gle/XebiETTrDJG1LT9V8" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">Join the waitlist</a>
     </section>
   </main>
 
@@ -155,5 +156,23 @@ footer{padding:26px 0 40px;font-size:13px;color:var(--muted);display:flex;justif
 </div>
 
 
+<script>
+(function(){
+  var box=document.getElementById('joinEmbed'),link=document.getElementById('joinLink'),f;
+  function fallback(){ if(f&&f.parentNode)f.parentNode.removeChild(f); link.style.display='inline-block'; }
+  document.addEventListener('securitypolicyviolation',function(e){
+    if(/frame|child/.test(e.effectiveDirective||''))fallback();
+  });
+  try{
+    f=document.createElement('iframe');
+    f.src='https://docs.google.com/forms/d/e/1FAIpQLSdU0KS2dnUtJL-PsxwHX_jD_cWwaD48kxYwUFG2e1SG-fU-fA/viewform?embedded=true';
+    f.title='Join the Hear waitlist';
+    f.setAttribute('loading','lazy');
+    f.style.cssText='width:100%;height:380px;border:0;display:block;border-radius:22px;background:#fff';
+    box.appendChild(f);
+    link.style.display='none';
+  }catch(err){fallback()}
+})();
+</script>
 </body>
 </html>
