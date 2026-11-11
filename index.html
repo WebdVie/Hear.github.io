@@ -110,7 +110,7 @@ footer{padding:26px 0 40px;font-size:13px;color:var(--muted);display:flex;justif
 <div class="wrap">
   <header>
     <a class="logo" href="#top" aria-label="Hear home"><i aria-hidden="true"><b style="height:8px"></b><b style="height:18px"></b><b style="height:12px"></b><b style="height:20px"></b><b style="height:7px"></b></i>Hear</a>
-    <a class="pill" href="https://forms.gle/XebiETTrDJG1LT9V8" target="_blank" rel="noopener">Join the waitlist</a>
+    <a class="pill" href="#join">Join the waitlist</a>
   </header>
 
   <main id="top">
@@ -119,9 +119,11 @@ footer{padding:26px 0 40px;font-size:13px;color:var(--muted);display:flex;justif
         <h1>Say what’s inside, without fear of judgment.</h1>
         <p class="lead">Hear is a social app made only of voices. No photos, no videos, and no one above anyone else. It is a place to share the side of you that nobody sees.</p>
         <div id="join">
-          <div id="joinEmbed" style="max-width:440px;margin:0 auto"></div>
-          <a id="joinLink" class="btn" href="https://forms.gle/XebiETTrDJG1LT9V8" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:16px 30px;font-size:16px">Join the waitlist</a>
-          <div class="msg">Leave your email and we’ll tell you the day Hear opens.</div>
+          <div class="join" id="joinForm">
+            <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="Your email address" aria-label="Email address">
+            <button class="btn" id="joinBtn" type="button">Join the waitlist</button>
+          </div>
+          <div class="msg" id="msg" aria-live="polite">Leave your email and we’ll tell you the day Hear opens.</div>
         </div>
       </div>
 
@@ -145,7 +147,7 @@ footer{padding:26px 0 40px;font-size:13px;color:var(--muted);display:flex;justif
     <section class="final">
       <h2>Hear is coming soon.</h2>
       <p>Leave your email and we’ll tell you the day it opens.</p>
-      <a class="btn" href="https://forms.gle/XebiETTrDJG1LT9V8" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">Join the waitlist</a>
+      <a class="btn" href="#join" style="display:inline-block;text-decoration:none">Join the waitlist</a>
     </section>
   </main>
 
@@ -158,20 +160,25 @@ footer{padding:26px 0 40px;font-size:13px;color:var(--muted);display:flex;justif
 
 <script>
 (function(){
-  var box=document.getElementById('joinEmbed'),link=document.getElementById('joinLink'),f;
-  function fallback(){ if(f&&f.parentNode)f.parentNode.removeChild(f); link.style.display='inline-block'; }
-  document.addEventListener('securitypolicyviolation',function(e){
-    if(/frame|child/.test(e.effectiveDirective||''))fallback();
-  });
-  try{
-    f=document.createElement('iframe');
-    f.src='https://docs.google.com/forms/d/e/1FAIpQLSdU0KS2dnUtJL-PsxwHX_jD_cWwaD48kxYwUFG2e1SG-fU-fA/viewform?embedded=true';
-    f.title='Join the Hear waitlist';
-    f.setAttribute('loading','lazy');
-    f.style.cssText='width:100%;height:380px;border:0;display:block;border-radius:22px;background:#fff';
-    box.appendChild(f);
-    link.style.display='none';
-  }catch(err){fallback()}
+  var FORM='https://docs.google.com/forms/d/e/1FAIpQLSdU0KS2dnUtJL-PsxwHX_jD_cWwaD48kxYwUFG2e1SG-fU-fA/formResponse';
+  var ENTRY='entry.451470742';
+  var email=document.getElementById('email'),btn=document.getElementById('joinBtn'),msg=document.getElementById('msg'),form=document.getElementById('joinForm'),busy=false;
+  function done(){
+    form.outerHTML='<div class="done"><strong>You’re on the list.</strong>We’ll email you when Hear opens.</div>';
+    msg.textContent='';
+  }
+  function join(){
+    if(busy)return;
+    var v=email.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){msg.textContent='Enter a valid email address.';email.focus();return}
+    busy=true;btn.disabled=true;btn.textContent='Sending…';
+    var body=new URLSearchParams();body.append(ENTRY,v);
+    fetch(FORM,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()})
+      .then(done)
+      .catch(function(){busy=false;btn.disabled=false;btn.textContent='Join the waitlist';msg.textContent='Something went wrong. Try again.'});
+  }
+  btn.addEventListener('click',join);
+  email.addEventListener('keydown',function(e){if(e.key==='Enter')join()});
 })();
 </script>
 </body>
